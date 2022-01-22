@@ -23,7 +23,7 @@
 <script>
 
     async function getAll() {
-        const response = await fetch('http://localhost/little2/getAll.php');
+        const response = await fetch('http://localhost:63342/little2/getAll.php');
         const data = await response.json();
 
         let place = document.getElementById("getAllTable");
@@ -37,18 +37,18 @@
     }
 
     async function saadaNimi(sisestatudNimi) {
-        const response = await fetch('http://localhost/little2/sisestaNimi.php', {
+        const response = await fetch('http://localhost:63342/little2/sisestaNimi.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(sisestatudNimi)
         });
-        const data = await response.json();
         await getAll();
+        const data = await response.json();
         document.getElementById("errorMessage").innerHTML = data;
     }
 
     async function kustutaRida(indeks) {
-        const response = await fetch('http://localhost/little2/kustutaRida.php', {
+        await fetch('http://localhost:63342/little2/kustutaRida.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(indeks)
