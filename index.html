@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>little2</title>
+</head>
+<body>
+<div style="background-color: burlywood">
+    <hr>
+    <button style="margin-left: 1em" onclick="getAll()">Get All</button>
+    &nbsp&nbsp||&nbsp&nbsp
+    <input id="nimi" type="text" name="nimi" placeholder="sisesta uus nimi">
+    <button onclick="saadaNimi(document.getElementById('nimi').value)">Submit</button>
+    &nbsp&nbsp||&nbsp&nbsp
+    <input id="indeks" type="number" name="indeks" placeholder="sisesta index">
+    <button onclick="kustutaRida(document.getElementById('indeks').value)">Delete</button>
+    <br>
+    <hr>
+</div>
+<div id="errorMessage" style="background-color: red"></div>
+<div id="getAllTable"></div>
+
+<script>
+
+    async function getAll() {
+        const response = await fetch('http://localhost/little2/getAll.php');
+        const data = await response.json();
+
+        let place = document.getElementById("getAllTable");
+        document.getElementById("errorMessage").innerHTML = "";
+        place.innerHTML = "";
+        for (let i = 0; i < data.length; i++) {
+            let div = document.createElement("div");
+            div.innerHTML = data[i].id + "&nbsp&nbsp" + data[i].nimi;
+            place.appendChild(div);
+        }
+    }
+
+    async function saadaNimi(sisestatudNimi) {
+        const response = await fetch('http://localhost/little2/sisestaNimi.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(sisestatudNimi)
+        });
+        const data = await response.json();
+        await getAll();
+        document.getElementById("errorMessage").innerHTML = data;
+    }
+
+    async function kustutaRida(indeks) {
+        const response = await fetch('http://localhost/little2/kustutaRida.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(indeks)
+        });
+        await getAll();
+    }
+
+</script>
+
+</body>
+</html>
